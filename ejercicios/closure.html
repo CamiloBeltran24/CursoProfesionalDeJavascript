@@ -11,6 +11,59 @@
       <h1>Closure</h1>
       <p><em>Abre la consola</em></p>
     </header>
-    <script></script>
+    <script>
+      //=====  IIFE
+      (function () {
+        let color = "green"; // color esta disponible globalmente.
+
+        function printColor() {
+          console.log(color);
+        }
+
+        printColor();
+      })();
+
+      // ====== Funciones que regresan funciones
+      function makeColorPrinter(color) {
+        let colorMessage = `The color is ${color}`;
+        return function () {
+          console.log(colorMessage);
+        };
+      }
+
+      const greenColorPrinter = makeColorPrinter("Green");
+      console.log(greenColorPrinter()); // Es necesario volver a ejecutar la funcion, si no se ejecuta la funcion nuevamente, simplemente se imprimira el codigo con la estructura de la funcion que es retornada
+
+      // VARIABLES PRIVADAS
+      function makeCounter(n) {
+        let count = n;
+
+        return {
+          increase: function () {
+            count += 1;
+          },
+          decrease: function () {
+            count -= 1;
+          },
+          getCount: function () {
+            return count;
+          },
+        };
+      }
+
+      let counter = makeCounter(7);
+
+      console.log(`The count is: ${counter.getCount()}`);
+      counter.increase();
+      console.log(`The count is: ${counter.getCount()}`);
+      counter.decrease();
+      console.log(`The count is: ${counter.getCount()}`);
+      counter.decrease();
+      console.log(`The count is: ${counter.getCount()}`);
+      counter.decrease();
+      console.log(`The count is: ${counter.getCount()}`);
+      counter.decrease();
+      console.log(`The count is: ${counter.getCount()}`);
+    </script>
   </body>
 </html>
