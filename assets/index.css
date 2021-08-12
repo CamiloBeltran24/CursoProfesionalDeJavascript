@@ -1,0 +1,30 @@
+header {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background-color: rgb(57, 180, 0);
+}
+.container {
+  width: 100%;
+  text-align: center;
+}
+.container .movie {
+  width: 700px;
+  margin: 0px auto;
+  margin-top: 10px;
+}
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  color: #f2f2f2;
+  background-color: rgb(57, 180, 0);
+  font-weight: 700;
+  transition: all 0.1s ease-in-out;
+}
+button:active {
+  transform: scale(0.9);
+}
