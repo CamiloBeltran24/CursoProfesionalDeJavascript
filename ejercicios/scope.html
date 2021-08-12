@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scope</title>
+  </head>
+  <body>
+    <header>
+      <h1>Scope</h1>
+    </header>
+
+    <a href="../ejercicios/">Go Back</a>
+    <p><em>Abre la consola</em></p>
+
+    <!-- Traemos jQuery mediante CDN, esto permite tener la variable $ que representa a jQuery de forma global. -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      //====== GLOBAL SCOPE
+      var message = "Hello Word!";
+
+      var $ = function (message) {
+        console.log(`Say: ${message}`);
+      };
+      //===== FUNCTION SCOPE
+      // DEntro de las funciones el scope puede ser tambien un problema, al usar var javascript definira la varaible i en el scope global, cuando el setTimeout se ejecute el ciclo for ya habra terminado si ejecucion. por eso se imprime 10 veces el numero 10
+      function printN() {
+        for (var i = 0; i < 10; i++) {
+          setTimeout(function () {
+            console.log(i);
+          }, 100);
+        }
+      }
+      printN();
+      // Para solucionar problemas relacionados con el scope podemos crear una funcion que recordara el scope actual, a esta funcion le debemos pasar cada una de las iteraciones del ciclo for. es por ello que este algoritmo si muestra el listado de numeros del 0 al 9
+      function printNumbers() {
+        for (var i = 0; i < 10; i++) {
+          function eventuallyPrint(n) {
+            setTimeout(function () {
+              console.log(n);
+            }, 1000);
+          }
+          eventuallyPrint(i);
+        }
+      }
+      printNumbers();
+
+      //====== BLOCK SCOPE
+      // Las varaibles que son declaradas con la palabra reservada let, son varaibles cuyo scope se limita al bloque en el que han sido escritas. para el siguiente ejemplo scope de i es el ciclo for, en cambio si declararamos la variable con var el scope seria toda la funcion.
+      function printNumbers2() {
+        for (let i = 0; i < 10; i++) {
+          setTimeout(function () {
+            console.group("Block Scope");
+            console.groupEnd();
+            console.log(i);
+          }, 1000);
+        }
+      }
+      printNumbers2();
+
+      //===== MODULE SCOPE
+      // El scope una varaible va a estar limitada al archivo en el que ha sido escrita.
+    </script>
+  </body>
+</html>
