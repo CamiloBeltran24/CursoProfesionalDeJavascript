@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>this</title>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <code>This</code> se refiere a un objeto, ese objeto es el que
+        actualmente esta ejecutando un pedazo de código.
+      </h1>
+    </header>
+    <a href="../ejercicios/">Go Back</a>
+    <p><em>Abre la consola</em></p>
+
+    <script>
+      // THIS EN EL SCOPE GLOBAL
+      // Cada vez que ejecutamos this fuera de una
+      //funcion o bloque de codigo, this hara alucion al
+      //objeto global que para este caso es window
+      console.group("This in global scope");
+      console.log(`this es: ${this}`);
+      console.groupEnd();
+
+      // THIS en el scope de una funcion
+      // cada vez que se se haga el llamado a this
+      // dentro de una funcion que no haga parte de
+      // un objeto, this sera el objeto window del scope global
+      function whoIsThis() {
+        return this;
+      }
+      console.group("This in function Scope");
+      console.log(`WhosIsThis(): ${whoIsThis()}`);
+      console.groupEnd();
+
+      // THIS en el scope de una funcion con strict mode
+      function whoIsThis2() {
+        "use strict";
+        return this;
+      }
+      console.group("This in function Scope StrictMode");
+      console.log(`WhosIsThis2(): ${whoIsThis2()}`);
+      console.groupEnd();
+
+      // This in an object context
+      const person = {
+        name: "Camilo",
+        age: "27",
+        saludar: function () {
+          console.group("This in an Object Context");
+          console.log(`Hola mi nombre es ${this.name}`);
+          console.groupEnd();
+        },
+      };
+      person.saludar();
+
+      //This cuando sacamos a una funcion de un objeto
+
+      const accion = person.saludar;
+      console.group("This sacando la funcion del objeto");
+      accion();
+      console.groupEnd();
+
+      //This in a Class Context
+      function Person(name) {
+        this.name = name;
+      }
+      Person.prototype.saludar = function () {
+        console.log(`Hola, soy ${this.name}`);
+      };
+
+      const johana = new Person("johana");
+      console.group("This in a Class Context");
+      johana.saludar();
+      console.groupEnd();
+    </script>
+  </body>
+</html>
