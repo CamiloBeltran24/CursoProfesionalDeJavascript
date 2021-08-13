@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Call, Apply y Bind</title>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <code>Call, Apply y Bind</code> son metodos propios de function, con
+        ellos podemos definir el cotexto de this.
+      </h1>
+    </header>
+    <a href="../ejercicios/">Go Back</a>
+    <p><em>Abre la consola</em></p>
+
+    <div class="buttons">
+      <button class="call-to-action">boton</button>
+      <button class="call-to-action">boton</button>
+      <button class="call-to-action">boton</button>
+    </div>
+
+    <script>
+      //========= Establecer This usando call
+
+      function saludar() {
+        console.log(`Hola soy ${this.name} ${this.lastName}`);
+      }
+      const pepe = {
+        name: "Pepe",
+        lastName: "Mojica",
+      };
+      saludar.call(pepe); //Con call podemos estipular cual es el objeto al que hara referencia this.
+      //para ello debemos pasar el objeto a la funcion call
+
+      function caminar(metros, direccion) {
+        console.log(
+          `Hola soy ${this.name} camino ${metros}mts hacia ${direccion}`
+        );
+      }
+      caminar.call(pepe, 200, "Calle 19");
+      //Cuando la funcion recibe parametros, el metodo call debe recibir como
+      //primer argumento el objeto al que hara referencia this, seguido por
+      //los argumentods necesarios para que la ocurra.
+
+      //======= Establecer this usando Apply
+
+      //apply es un metodo de function que hace exactamente los mismo que call
+      //solo que este difiere en la forma en la que los
+      //parametros deben ser pasados al metodo.
+
+      //apply recibe como primer parametro el objeto, seguido por un arreglo que contendra
+      //los demas argumentos que necesite la funcion a ejecutar.
+      caminar.apply(pepe, [400, "Norte"]);
+      //Es posible tambien nviar la vartiable con el arreglo
+      const valores = [1000, "Este"];
+      caminar.apply(pepe, valores);
+
+      //========= Establecer this usando bind
+
+      // Bind funciona de forma diferente a apply y call, bind recibe como parametro el objeto de scope, bind retornara una nueva funcion.
+      const luis = {
+        name: "Luis",
+        lastName: "Ordoñez",
+      };
+
+      const luisSaluda = saludar.bind(luis); //saludar.bind(luis) no imprime nada. se debe almacenar la funcion dentro de una variable para que luego sea ejecutada.
+      luisSaluda();
+
+      const daniel = { name: "Daniel", lastName: "Papadopulus" };
+      const danielCamina = caminar.bind(daniel);
+      danielCamina(1000, "Sur"); //Es posible tambien enviar otros parametros que sean necesarios por la funcion.
+      //====
+      const pablo = { name: "Pablo", lastName: "Arteaga" };
+      const pabloCamina = caminar.bind(pablo, 10000, "Occidente"); // tambien podemos enviar todos los parametros al igual que con call
+      pabloCamina();
+
+      // Ejemplo de cuando es util utilizar estos metodos
+
+      const buttons = document.getElementsByClassName("call-to-action");
+      //Buttons es un NodeList, los nodelist, son
+      //similares a los arreglos pero no son iguales a ellos. forEach no funcionara con buttons puesto que
+      //forEach es un metodo de los array para ello debemos utilizar el prototype de array con call indicar el contexto de buttons.... Ver linea 93
+
+      // buttons.forEach((button) => {
+      //   button.onclick = () => {
+      //     console.log("Nunca pares de aprender agonia");
+      //   };
+      // });
+      console.log(buttons);
+      Array.prototype.forEach.call(buttons, (button) => {
+        button.onclick = () => alert("Nunca pares de aprender");
+      });
+    </script>
+  </body>
+</html>
