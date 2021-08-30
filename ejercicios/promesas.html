@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promesas</title>
+  </head>
+  <body>
+    <h1>Promesas</h1>
+    <button class="button" id="getTopMoviesInSequence">
+      Get top movies in sequence
+    </button>
+    <button class="button" id="getTopMoviesInParallel">
+      Get top movies in parallel
+    </button>
+    <button class="button" id="getFastestTopMovies">
+      Get fastest top movies
+    </button>
+    <ul id="movies"></ul>
+    <script>
+      // const publicKey = "8cbbb1a8318c65a1b6926dd04f911ab8";
+      // const hash = "8f8c96044cc3a6a9d6e13619a9528ff4";
+      // const heroList = document.getElementById("heroList");
+
+      // function getId() {
+      //   let id = document.getElementById("heroId").value;
+      //   if (id == undefined || id == "") {
+      //     return "Error, Id invalido o vacio";
+      //   } else {
+      //     return id;
+      //   }
+      // }
+      // function getCharacter(id) {
+      //   const url = `http://gateway.marvel.com/v1/public/characters/${id}?ts=1&apikey=${publicKey}&hash=${hash}`;
+      //   return fetch(url)
+      //     .then((response) => response.json())
+      //     .then((data) => data.data.results);
+      // }
+      // function getCharacters(publicKey, hash) {
+      //   const url = `http://gateway.marvel.com/v1/public/characters?ts=1&apikey=${publicKey}&hash=${hash}`;
+      //   return fetch(url)
+      //     .then((response) => response.json())
+      //     .then((response) => response.data.results);
+      // }
+      // function renderCharacter() {}
+      // document.querySelector("#btnAllCharacters").onclick = () => {
+      //   console.log(getCharacters(publicKey, hash));
+      //   heroList.innerHTML = " ";
+      // };
+      // document.querySelector("#btnCharacter").onclick = async function (
+      //   params
+      // ) {
+      //   const id = getId();
+      //   // console.log(id);
+      //   const character = await getCharacter(id);
+      // };
+      const APIkey = "d405140f9d9c718edcf84b1fb56b3012";
+
+      async function getMovie(id) {
+        const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${APIkey}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+        // return fetch(url)
+        //   .then((response) => response.json())
+        //   .then((data) => data.results);
+      }
+
+      async function getPopularMovies() {
+        const url = `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=${APIkey}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.results;
+        // return fetch(url)
+        //   .then((response) => response.json())
+        //   .then((data) => data.results);
+      }
+
+      async function getTopMoviesIds(n = 5) {
+        // return getPopularMovies().then((popularMovies) =>
+        //   popularMovies.slice(0, n).map((movie) => movie.id)
+        // );
+        // try {
+        //   const popularMovies = await getPopularMovies();
+        // } catch (error) {
+        //   console.log(error)
+        // }
+        const popularMovies = await getPopularMovies();
+        const ids = popularMovies.slice(0, n).map((movie) => movie.id);
+        return ids;
+      }
+
+      function renderMovies(movies) {
+        const movieList = document.getElementById("movies");
+        movieList.innerHTML = " ";
+        console.log(movies);
+        movies.forEach((movie) => {
+          const listItem = document.createElement("li");
+          listItem.innerHTML = `
+            <img class="movieImg" src="https://image.tmdb.org/t/p/w342${movie.poster_path}" />
+            <h5 class="movieTittle">${movie.title}</h5>
+            <p>Released on <em>${movie.release_date}</em></p>
+            <button>Ver mas</button>
+            `;
+          movieList.appendChild(listItem);
+        });
+      }
+      async function getTopMoviesInSequence() {
+        const ids = await getTopMoviesIds();
+        const movies = [];
+        for (const id of ids) {
+          //el ciclo for que hace uso de of, nos regresa cada uno de los valores que para este caso esta dentro de ids
+          const movie = await getMovie(id);
+          movies.push(movie);
+        }
+        return movies;
+      }
+      async function getTopMoviesInParallel() {
+        const ids = await getTopMoviesIds();
+        const moviesPromises = ids.map((id) => getMovie(id)); // convertimos cada id a una nueva promesa que retorna la funcion getMovie()
+
+        const movies = await Promise.all(moviesPromises); //Promise.all() indica que debe esperar a que se resulvan todas las promesas
+        return movies;
+      }
+
+      async function getFastestTopMovies() {
+        const ids = await getTopMoviesIds();
+        const moviesPromises = ids.map((id) => getMovie(id));
+        const movie = await Promise.race(moviesPromises); // promise.race() nos trae a la primera promesa que se resuelva primero.
+        return movie;
+      }
+      document.getElementById("getTopMoviesInSequence").onclick =
+        async function () {
+          const movies = await getTopMoviesInSequence();
+          renderMovies(movies);
+        };
+
+      document.getElementById("getTopMoviesInParallel").onclick =
+        async function () {
+          const movies = await getTopMoviesInParallel();
+          renderMovies(movies);
+        };
+
+      document.getElementById("getFastestTopMovies").onclick =
+        async function () {
+          const movie = await getFastestTopMovies();
+          renderMovies([movie]); //movie es un solo dato, para pasarlo a renderMovie se debe pasar como un arreglo.
+        };
+    </script>
+  </body>
+</html>
