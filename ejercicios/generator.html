@@ -4,7 +4,48 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Generators</title>
   </head>
-  <body></body>
+  <body>
+    <h1>Generator</h1>
+    <a href="../ejercicios/">Go Back</a>
+    <p>Abre la consola</p>
+  </body>
+  <script>
+    //para definir un generator usamos la palabra reservada function seguida por un * (function*)
+    function* simpleGenerator() {
+      console.log("GENERATOR START");
+      yield 1; //yield indica que este punto se dentendra la ejecucion hasta que lo indiquemos. yield tiene funcionamiento similar a returr pues tambien es capaz de tornar valores para este caso retornara 1.
+      console.log("GENERATOR END");
+      yield 2; // yield retorna 2
+    }
+
+    const gen = simpleGenerator(); //los generadores son funciones especiales que no son ejecutables de por si, estas deben ser instanciadas dentro de una variable y luego ser llamada haciendo uso de dicha variable.
+
+    //para ejecutar el generator hacemos uso del metodo next
+    // gen.next();
+
+    function* idMaker() {
+      let id = 1;
+      while (true) {
+        yield id;
+        id++;
+      }
+    }
+
+    function* idMakerWithReset() {
+      let id = 1;
+      let reset;
+      while (true) {
+        reset = yield id;
+        if (reset) {
+          id = 1;
+        } else {
+          id++;
+        }
+      }
+    }
+    // const gen2 = idMakerWithReset()
+    //gen2.next(true)  => si pasamos true el valor que retorna el generador volvera a 1
+  </script>
 </html>
