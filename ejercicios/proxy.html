@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Proxy</h1>
+    <a href="../ejercicios/">Go Back</a>
+    <p>Abre la consola</p>
+    <script src="https://unpkg.com/fast-levenshtein@2.0.6/levenshtein.js"></script>
+    <script>
+      // Proxy es parecido a getters y setters
+      // Usa un concepto que se llama traps: son interceptores de llamadas. A diferencia de getters, no opera sobre una propiedad, si no sobre un objeto.
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy#Methods_of_the_handler_object
+
+      // Creemos un ejemplo donde interceptamos llamadas para leer una propiedad
+      // Si la propiedad existe, la regresamos
+      // Si no existe, entonces sugerimos una que pueda funcionar
+
+      const target = {
+        red: "rojo",
+        green: "verde",
+        blue: "Azul",
+      };
+      const handler = {
+        //handler posee varios metodos, para este caso utilizaremos get, para ver mas metodos ver documentacion handler
+        get(obj, prop) {
+          //get recibe dos parametros que son objeto => target y prop => atributo del objeto
+          if (prop in obj) {
+            return obj[prop];
+          }
+          const suggestion = Object.keys(obj).find((key) => {
+            return Levenshtein.get(key, prop) <= 2;
+          });
+          if (suggestion) {
+            console.log(
+              `${prop} no se encontro, Quisiste decir ${suggestion}?`
+            );
+          }
+          return obj[prop];
+        },
+      };
+      const p = new Proxy(target, handler); // proxy recibe dos paramentros que son target , handler
+
+      // Para eso eso vamos a usar un algoritmo que se llama Levenshtein. (window.Levenshtein.get)
+      // Ejemplos de levenshtein distance (usa window.Levenshtein)
+
+      // window.Levenshtein.get("Javascript","Java")
+    </script>
+  </body>
+</html>
