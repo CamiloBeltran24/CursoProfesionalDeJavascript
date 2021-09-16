@@ -16,20 +16,16 @@ MediaPlayer.prototype._initPugins = function () {
       this.media.muted = value;
     },
   };
-  // player.muted();
   this.plugins.forEach((plugin) => {
     plugin.run(player);
   });
 };
-
 MediaPlayer.prototype.play = function () {
   this.media.play();
 };
-
 MediaPlayer.prototype.pause = function () {
   this.media.pause();
 };
-
 MediaPlayer.prototype.togglePlay = function () {
   if (this.media.paused) {
     this.play();
@@ -37,15 +33,12 @@ MediaPlayer.prototype.togglePlay = function () {
     this.pause();
   }
 };
-
 MediaPlayer.prototype.mute = function () {
   this.media.muted = true;
 };
-
 MediaPlayer.prototype.unmute = function () {
   this.media.muted = false;
 };
-
 MediaPlayer.prototype.toggleMute = function () {
   if (this.media.muted) {
     this.unmute();

@@ -34,9 +34,7 @@
 
       loadButton.onclick = async function () {
         startLoading();
-
         controller = new AbortController(); //AbortController es un nuevo feature de Js que permite crear controladores para detener las peticiones AJAX, la clase AbortController posee unatributo llamaso signal que sera el que usaremos para pausar la peticion
-
         try {
           const response = await fetch(url, { signal: controller.signal }); // fetch recibe la url (obligatoria y un segundo parametro de configuracion que puede ser opcional.)
           const blob = await response.blob(); //.blob retorna el codigo binario que reprsenta a la respuesta de la peticion
@@ -45,7 +43,6 @@
         } catch (error) {
           console.log(error.message);
         }
-
         stopLoading();
       };
 

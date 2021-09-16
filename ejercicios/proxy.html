@@ -33,6 +33,7 @@
             return obj[prop];
           }
           const suggestion = Object.keys(obj).find((key) => {
+            // object.keys(obj) lista todas las llavez del objeto obj, con find le indicamops que le queremos un valor especifico
             return Levenshtein.get(key, prop) <= 2;
           });
           if (suggestion) {
