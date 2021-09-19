@@ -19,6 +19,7 @@ muteButton.onclick = () => {
   player.toggleMute();
 };
 
+// Ciclo para saber si el navegador en que se esta viendo la pagina le da soporte a los service workers
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js").catch((error) => {
     console.log(error.message);
